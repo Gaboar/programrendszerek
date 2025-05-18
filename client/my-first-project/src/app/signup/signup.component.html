@@ -1,0 +1,35 @@
+<div class="login-container">
+    <form class="login-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <mat-label>Név</mat-label>
+            <input matInput formControlName="name" required />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Születésnap</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birthday" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="name" type="email" required />
+            <mat-error *ngIf="signupForm.get('email')?.errors && signupForm.get('email')?.errors!['email']">Email cím nem valid</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Jelszó</mat-label>
+            <input matInput formControlName="password" type="password" required />
+            <mat-error *ngIf="signupForm.get('password')?.errors && signupForm.get('password')?.errors!['minlength']">A jelszónak legalább 8 karakter hosszúnak kell lennie</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Jelszó megerősítés</mat-label>
+            <input matInput formControlName="confirmPassword" type="password" required />
+            <mat-error *ngIf="signupForm.get('confirmPassword')?.errors && signupForm.get('confirmPassword')?.errors!['mustMatch']">Jelszavak nem egyeznek</mat-error>
+        </mat-form-field>
+        <div class="buttons">
+            <button mat-raised-button color="primary" type="submit">Regisztráció</button>
+        </div>
+        <div class="buttons">
+            <button mat-raised-button type="reset" (click)="goBack()">Vissza</button>
+        </div>
+    </form>
+</div>

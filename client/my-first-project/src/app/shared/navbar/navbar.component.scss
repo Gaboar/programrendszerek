@@ -1,0 +1,17 @@
+.resultlist {
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.searchfield:focus ~ .resultlist {
+    display: block;
+}
+
+.resultlist:hover {
+    display: block;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}

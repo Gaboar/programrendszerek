@@ -1,0 +1,13 @@
+<mat-toolbar *ngIf="user" color="primary">
+    <button mat-mini-fab (click)="navigate('/timeline')"><mat-icon>home</mat-icon></button>
+    <input matInput type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Felhasználók keresése" class="searchfield" [matAutocomplete]="auto"/>
+    <mat-autocomplete #auto="matAutocomplete">
+      @for (r of searchResults; track r) {
+        <mat-option><a (click)="navigate(r.link)">{{r.name}}</a></mat-option>
+      }
+    </mat-autocomplete>
+    <span class="spacer"></span>
+    <button mat-raised-button (click)="navigate('/profile/'+user._id)">Saját profil</button>
+    <button *ngIf="isAdmin" mat-raised-button (click)="navigate('admin')">Admin panel</button>
+    <button mat-raised-button (click)="logout()">Kijelentkezés</button>
+</mat-toolbar>

@@ -1,0 +1,15 @@
+<div class="form-container">
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit($event)" class="post-form">
+        <h2>Új bejegyzés</h2>
+        <mat-form-field>
+            <textarea  matInput formControlName="text" type="text"></textarea>
+        </mat-form-field>
+        <input formControlName="image" type="file" (change)="onFileSelected($event)"/>
+        <div *ngIf="postForm.get('text')?.invalid && (postForm.get('text')?.dirty || postForm.get('text')?.touched || postForm.get('image')?.dirty || postForm.get('image')?.touched)">
+            <p *ngIf="postForm.get('text')?.errors && postForm.get('text')?.errors!['atleastOne']">At least one is required.</p>
+        </div>
+        <div class="buttons">
+            <button mat-raised-button color="primary" type="submit">Közzététel</button>
+        </div>
+    </form>
+</div>

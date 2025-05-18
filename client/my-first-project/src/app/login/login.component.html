@@ -1,0 +1,21 @@
+<div class="login-container">
+    <form class="login-form" (ngSubmit)="login()">
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="email" name="email" type="email" required />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Jelszó</mat-label>
+            <input matInput [(ngModel)]="password" name="password" type="password" required />
+        </mat-form-field>
+        <div class="buttons">
+            <button mat-raised-button color="primary" type="submit">Bejelentkezés</button>
+        </div>
+        <div class="buttons">
+            <button mat-raised-button type="button" (click)="navigate('/signup')">Regisztráció</button>
+        </div>
+        <div *ngIf="errorMessage">
+            <p>{{errorMessage}}</p>
+        </div>
+    </form>
+</div>

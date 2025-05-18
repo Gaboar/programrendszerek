@@ -1,0 +1,42 @@
+<app-navbar></app-navbar>
+<div *ngIf="user">
+    <h2>{{user.name}} profilja</h2>
+    <div *ngIf="currentUser && currentUser._id !== user._id">
+        <button *ngIf="isFriends === 'false'" (click)="addFriend()">Ismerősnek jelölés</button>
+        <button *ngIf="isFriends === 'pending' && sender === currentUser._id" (click)="removeFriend()">Jelölés visszavonása</button>
+        <button *ngIf="isFriends === 'pending' && sender === user._id" (click)="removeFriend()">Visszajelölés</button>
+        <button *ngIf="isFriends === 'pending' && sender === user._id" (click)="removeFriend()">Jelölés eltávolítása</button>
+        <button *ngIf="isFriends === 'true'" (click)="removeFriend()">Ismerős törlése</button>
+    </div>
+    <div *ngIf="currentUser && currentUser._id === user._id">
+        <button (click)="navigate('/edit-profile')">Profil szerkesztése</button>
+    </div>
+    <table>
+        <tbody>
+            <tr>
+                <td>Név</td>
+                <td>{{user.name}}</td>
+            </tr>
+            <tr>
+                <td>Születésnap</td>
+                <td>{{user.birthday}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{user.email}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<app-post-creator [loc]="'public'"></app-post-creator>
+<div *ngIf="posts">
+    <div *ngIf="posts.length > 0; else noPosts">
+        <div *ngFor="let post of posts" class="post">
+            <p>{{post.text}}</p>
+            <img *ngIf="post.imageUrl !== ''" [src]="'http://localhost:5000'+ post.imageUrl" alt="Image" width="400">
+        </div>
+    </div>
+    <ng-template #noPosts>
+        <p>Ennek a felhasználónak még nincs bejegyzése</p>
+    </ng-template>
+</div>
