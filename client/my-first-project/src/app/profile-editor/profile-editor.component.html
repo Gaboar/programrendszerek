@@ -1,35 +1,38 @@
 <app-navbar></app-navbar>
-<div *ngIf="user">
-    <form class="login-form" [formGroup]="profileForm" (ngSubmit)="onSubmit($event)">
-        <input formControlName="name" type="text" placeholder="Név" [ngClass]="{'invalid-input': profileForm.get('name')?.errors}" />
-        <div *ngIf="profileForm.get('name')?.invalid && (profileForm.get('name')?.dirty || profileForm.get('name')?.touched)">
-            <p *ngIf="profileForm.get('name')?.errors && profileForm.get('name')?.errors!['required']">Add meg a neved.</p>
-        </div>
+<div class="form-container" *ngIf="user">
+    <form class="editor-form" [formGroup]="profileForm" (ngSubmit)="onSubmit($event)">
+        <h2>Profil szerkesztése</h2>
+        <mat-form-field>
+            <mat-label>Név</mat-label>
+            <input matInput formControlName="name" />
+        </mat-form-field>
         <input formControlName="image" type="file" (change)="onFileSelected($event)"/>
-        <input formControlName="birthday" type="date" placeholder="" />
-        <input formControlName="email" type="email" placeholder="Email" [ngClass]="{'invalid-input': profileForm.get('email')?.errors}" />
-        <div *ngIf="profileForm.get('email')?.invalid && (profileForm.get('email')?.dirty || profileForm.get('email')?.touched)">
-            <p *ngIf="profileForm.get('email')?.errors && profileForm.get('email')?.errors!['required']">Adj meg egy email címet.</p>
-            <p *ngIf="profileForm.get('email')?.errors && profileForm.get('email')?.errors!['email']">Email cím nem valid.</p>
-        </div>
-        <input formControlName="password" type="password" placeholder="Jelszó" [ngClass]="{'invalid-input': profileForm.get('password')?.errors}" />
-        <div *ngIf="profileForm.get('password')?.invalid && (profileForm.get('password')?.dirty || profileForm.get('password')?.touched)">
-            <p *ngIf="profileForm.get('password')?.errors && profileForm.get('password')?.errors!['required']">Adj meg egy jelszót.</p>
-            <p *ngIf="profileForm.get('password')?.errors && profileForm.get('password')?.errors!['minlength']">A jelszónak legalább 8 karakter hosszúnak kell lennie.</p>
-        </div>
-        <input formControlName="confirmPassword" type="password" placeholder="Jelszó megerősítés" [ngClass]="{'invalid-input': profileForm.get('confirmPassword')?.errors}" />
-        <div *ngIf="profileForm.get('confirmPassword')?.invalid && (profileForm.get('confirmPassword')?.dirty || profileForm.get('confirmPassword')?.touched || profileForm.get('password')?.dirty || profileForm.get('password')?.touched)">
-            <p *ngIf="profileForm.get('confirmPassword')?.errors && profileForm.get('confirmPassword')?.errors!['required']">Erősítsd meg a jelszavad.</p>
-            <p *ngIf="profileForm.get('confirmPassword')?.errors && profileForm.get('confirmPassword')?.errors!['mustMatch']">Jelszavak nem egyeznek.</p>
-        </div>
-        <div *ngIf="profileForm.get('name')?.invalid && (profileForm.get('name')?.dirty || profileForm.get('name')?.touched)">
-            <p *ngIf="profileForm.get('name')?.errors && profileForm.get('name')?.errors!['atleastOne']">At least one is required.</p>
+        <mat-form-field>
+            <mat-label>Születési dátum</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birthday" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" />
+            <mat-error *ngIf="profileForm.get('email')?.errors && profileForm.get('email')?.errors!['email']">Email cím nem valid</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Jelszó</mat-label>
+            <input matInput formControlName="password" type="password" />
+            <mat-error *ngIf="profileForm.get('password')?.errors && profileForm.get('password')?.errors!['minlength']">A jelszónak legalább 8 karakter hosszúnak kell lennie</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Jelszó megerősítés</mat-label>
+            <input matInput formControlName="confirmPassword" type="password" />
+            <mat-error *ngIf="profileForm.get('confirmPassword')?.errors && profileForm.get('confirmPassword')?.errors!['mustMatch']">Jelszavak nem egyeznek</mat-error>
+        </mat-form-field>
+        <div class="buttons">
+            <button mat-raised-button color="primary" type="submit">Mentés</button>
         </div>
         <div class="buttons">
-            <button type="submit">Mentés</button>
-        </div>
-        <div class="buttons">
-            <button type="reset" (click)="goBack()">Vissza</button>
+            <button mat-raised-button type="reset" (click)="goBack()">Vissza</button>
         </div>
     </form>
 </div>

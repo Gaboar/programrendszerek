@@ -324,7 +324,7 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
             const query = Friend.find({$or: [
                 {user1: user},
                 {user2: user}
-            ]});
+            ], accepted: true});
             query.then(data => {
                 const ids = data.map(f => (f.user1 === user ? f.user2 : f.user1))
                 const query = User.find({_id: {$in: ids}});
@@ -471,7 +471,7 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
     router.post('/getPublicPostByUser', (req: Request, res: Response) => {
         if (req.isAuthenticated()) {
             const user = req.body.userid
-            const query = Post.find({author: user});
+            const query = Post.find({author: user, location: 'public'});
             query.then(data => {
                 res.status(200).send(data);
             }).catch(error => {
@@ -488,12 +488,21 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
             const query = Friend.find({$or: [
                 {user1: user},
                 {user2: user}
-            ]});
+            ], accepted: true});
             query.then(data => {
                 const ids = data.map(f => (f.user1 === user ? f.user2 : f.user1))
-                const query = Post.find({author: {$in: ids}});
+                const query = GroupMember.find({user: user});
                 query.then(data => {
-                    res.status(200).send(data);
+                    const ids2 = data.map(f => (f.group))
+                    const query = Post.find({$or: [
+                        {author: {$in: ids}, location: 'public'},
+                        {location: {$in: ids2}, author: {$ne: user}}
+                    ]});
+                    query.then(data => {
+                        res.status(200).send(data);
+                    }).catch(error => {
+                        res.status(500).send(error);
+                    });
                 }).catch(error => {
                     res.status(500).send(error);
                 });

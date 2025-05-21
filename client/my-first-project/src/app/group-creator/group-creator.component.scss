@@ -1,0 +1,27 @@
+.form-container {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.group-form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    gap: 10px;
+}
+
+.group-form .buttons {
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+}
+
+.group-form button {
+    width: 50%;
+}

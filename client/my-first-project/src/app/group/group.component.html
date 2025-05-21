@@ -1,23 +1,37 @@
 <app-navbar></app-navbar>
-<div *ngIf="group">
-    <h2>{{group.name}}</h2>
-    <div *ngIf="currentUser">
-        <button *ngIf="!isInGroup" (click)="joinGroup()">Csatlakozás</button>
-        <button *ngIf="isInGroup" (click)="leaveGroup()">Kilépés</button>
-    </div>
-    <div>
-        <p>{{group.description}}</p>
-    </div>
-</div>
-<app-post-creator *ngIf="group" [loc]="group._id"></app-post-creator>
-<div *ngIf="posts">
-    <div *ngIf="posts.length > 0; else noPosts">
-        <div *ngFor="let post of posts" class="post">
-            <p>{{post.text}}</p>
-            <img *ngIf="post.imageUrl !== ''" [src]="'http://localhost:5000'+ post.imageUrl" alt="Image" width="400">
+<div class="middle-container">
+    <div *ngIf="group">
+        <div class="name-container">
+            <img [src]="'http://localhost:5000'+ group.imageUrl" alt="Image" width="600" height="100">
+            <h1>{{group.name}}</h1>
+        </div>
+        <div class="buttons" *ngIf="currentUser">
+            <button mat-raised-button color="primary" *ngIf="!isInGroup" (click)="joinGroup()">Csatlakozás</button>
+            <button mat-raised-button *ngIf="isInGroup" (click)="leaveGroup()">Kilépés</button>
+        </div>
+        <div>
+            <h2>Leírás</h2>
+            <p>{{group.description}}</p>
         </div>
     </div>
-    <ng-template #noPosts>
-        <p>Ebben a csopotban még nincs bejegyzés</p>
-    </ng-template>
+    <app-post-creator *ngIf="group" [loc]="group._id"></app-post-creator>
+    <div *ngIf="posts">
+        <div *ngIf="posts.length > 0; else noPosts">
+            <div *ngFor="let post of posts" class="post-container">
+                <div class="author">
+                    <a *ngIf="authors[post.author]" (click)="navigate('/profile/'+authors[post.author]._id)">
+                        <img *ngIf="authors[post.author].imageUrl !== ''" [src]="'http://localhost:5000'+ authors[post.author].imageUrl" alt="Image" width="30" height="30">
+                        <p>{{authors[post.author].name}}</p>
+                    </a>
+                </div>
+                <div class="post">
+                    <p>{{post.text}}</p>
+                    <img *ngIf="post.imageUrl !== ''" [src]="'http://localhost:5000'+ post.imageUrl" alt="Image" width="500">
+                </div>
+            </div>
+        </div>
+        <ng-template #noPosts>
+            <p>Ebben a csopotban még nincs bejegyzés</p>
+        </ng-template>
+    </div>
 </div>

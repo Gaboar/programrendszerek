@@ -6,11 +6,15 @@ import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { User } from '../shared/model/User';
 import { GroupService } from '../shared/services/group.service';
 import { Router } from '@angular/router';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-group-creator',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, NavbarComponent],
+  imports: [ReactiveFormsModule, CommonModule, NavbarComponent, MatInputModule, MatFormFieldModule, MatButtonModule, MatDatepickerModule],
   templateUrl: './group-creator.component.html',
   styleUrl: './group-creator.component.scss'
 })

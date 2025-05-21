@@ -3,10 +3,14 @@
     <app-post-creator [loc]="'public'"></app-post-creator>
     <div *ngIf="posts">
         <div *ngIf="posts.length > 0; else noPosts">
-            <div class="postContainer">
+            <div *ngFor="let post of posts" class="post-container">
                 <div class="author">
+                    <a *ngIf="authors[post.author]" (click)="navigate('/profile/'+authors[post.author]._id)">
+                        <img *ngIf="authors[post.author].imageUrl !== ''" [src]="'http://localhost:5000'+ authors[post.author].imageUrl" alt="Image" width="30" height="30">
+                        <p>{{authors[post.author].name}}</p>
+                    </a>
                 </div>
-                <div *ngFor="let post of posts" class="post">
+                <div class="post">
                     <p>{{post.text}}</p>
                     <img *ngIf="post.imageUrl !== ''" [src]="'http://localhost:5000'+ post.imageUrl" alt="Image" width="500">
                 </div>
@@ -17,20 +21,26 @@
         </ng-template>
     </div>
 </div>
-<div>
-    <a (click)="navigate('create-group')">Csoport létrehozása</a>
-    <div *ngFor="let group of groups" class="group">
-        <a (click)="navigate('/group/'+group._id)">
-            <img *ngIf="group.imageUrl !== ''" [src]="'http://localhost:5000'+ group.imageUrl" alt="Image" height="30">
-            <p>{{group.name}}</p>
-        </a>
+<div class="side-container">
+    <div calss="group-container">
+        <h4>Csoportok</h4>
+        <div class="group">
+            <a (click)="navigate('create-group')"><mat-icon>add</mat-icon>Csoport létrehozása</a>
+        </div>
+        <div *ngFor="let group of groups" class="group">
+            <a (click)="navigate('/group/'+group._id)">
+                <img *ngIf="group.imageUrl !== ''" [src]="'http://localhost:5000'+ group.imageUrl" alt="Image" width="30" height="30">
+                <p>{{group.name}}</p>
+            </a>
+        </div>
     </div>
-</div>
-<div *ngIf="friends">
-    <div *ngFor="let friend of friends" class="friend">
-        <a (click)="navigate('/group/'+friend._id)">
-            <img *ngIf="friend.imageUrl !== ''" [src]="'http://localhost:5000'+ friend.imageUrl" alt="Image" height="30">
-            <p>{{friend.name}}</p>
-        </a>
+    <div class="friend-container" *ngIf="friends">
+        <h4>Ismerősök</h4>
+        <div *ngFor="let friend of friends" class="friend">
+            <a (click)="navigate('/profile/'+friend._id)">
+                <img *ngIf="friend.imageUrl !== ''" [src]="'http://localhost:5000'+ friend.imageUrl" alt="Image" width="30" height="30">
+                <p>{{friend.name}}</p>
+            </a>
+        </div>
     </div>
 </div>

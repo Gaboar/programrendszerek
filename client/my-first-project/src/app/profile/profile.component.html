@@ -1,42 +1,53 @@
 <app-navbar></app-navbar>
-<div *ngIf="user">
-    <h2>{{user.name}} profilja</h2>
-    <div *ngIf="currentUser && currentUser._id !== user._id">
-        <button *ngIf="isFriends === 'false'" (click)="addFriend()">Ismerősnek jelölés</button>
-        <button *ngIf="isFriends === 'pending' && sender === currentUser._id" (click)="removeFriend()">Jelölés visszavonása</button>
-        <button *ngIf="isFriends === 'pending' && sender === user._id" (click)="removeFriend()">Visszajelölés</button>
-        <button *ngIf="isFriends === 'pending' && sender === user._id" (click)="removeFriend()">Jelölés eltávolítása</button>
-        <button *ngIf="isFriends === 'true'" (click)="removeFriend()">Ismerős törlése</button>
-    </div>
-    <div *ngIf="currentUser && currentUser._id === user._id">
-        <button (click)="navigate('/edit-profile')">Profil szerkesztése</button>
-    </div>
-    <table>
-        <tbody>
-            <tr>
-                <td>Név</td>
-                <td>{{user.name}}</td>
-            </tr>
-            <tr>
-                <td>Születésnap</td>
-                <td>{{user.birthday}}</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td>{{user.email}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<app-post-creator [loc]="'public'"></app-post-creator>
-<div *ngIf="posts">
-    <div *ngIf="posts.length > 0; else noPosts">
-        <div *ngFor="let post of posts" class="post">
-            <p>{{post.text}}</p>
-            <img *ngIf="post.imageUrl !== ''" [src]="'http://localhost:5000'+ post.imageUrl" alt="Image" width="400">
+<div class="middle-container">
+    <div *ngIf="user">
+        <div class="name-container">
+            <img [src]="'http://localhost:5000'+ user.imageUrl" alt="Image" width="100" height="100">
+            <h1>{{user.name}}</h1>
         </div>
+        <div class="buttons" *ngIf="currentUser && currentUser._id !== user._id">
+            <button mat-raised-button color="primary" *ngIf="isFriends === 'false'" (click)="addFriend()">Ismerősnek jelölés</button>
+            <button mat-raised-button *ngIf="isFriends === 'pending' && sender === currentUser._id" (click)="removeFriend()">Jelölés visszavonása</button>
+            <button mat-raised-button color="primary" *ngIf="isFriends === 'pending' && sender === user._id" (click)="acceptFriend()">Visszajelölés</button>
+            <button mat-raised-button color="warn" *ngIf="isFriends === 'pending' && sender === user._id" (click)="removeFriend()">Jelölés eltávolítása</button>
+            <button mat-raised-button *ngIf="isFriends === 'true'" (click)="removeFriend()">Ismerős törlése</button>
+        </div>
+        <div class="buttons" *ngIf="currentUser && currentUser._id === user._id">
+            <button mat-raised-button (click)="navigate('/edit-profile')">Profil szerkesztése</button>
+        </div>
+        <h2>Adatok</h2>
+        <table>
+            <tbody>
+                <tr *ngIf="user.birthday">
+                    <td>Születési dátum:</td>
+                    <td>{{user.birthday}}</td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>{{user.email}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <ng-template #noPosts>
-        <p>Ennek a felhasználónak még nincs bejegyzése</p>
-    </ng-template>
+    <app-post-creator [loc]="'public'" *ngIf="currentUser && user && currentUser._id === user._id"></app-post-creator>
+    <h2 class="post-title">Bejegyzések</h2>
+    <div *ngIf="posts">
+        <div *ngIf="posts.length > 0; else noPosts">
+            <div *ngFor="let post of posts" class="post-container">
+                <div class="author">
+                    <a *ngIf="authors[post.author]" (click)="navigate('/profile/'+authors[post.author]._id)">
+                        <img *ngIf="authors[post.author].imageUrl !== ''" [src]="'http://localhost:5000'+ authors[post.author].imageUrl" alt="Image" width="30" height="30">
+                        <p>{{authors[post.author].name}}</p>
+                    </a>
+                </div>
+                <div class="post">
+                    <p>{{post.text}}</p>
+                    <img *ngIf="post.imageUrl !== ''" [src]="'http://localhost:5000'+ post.imageUrl" alt="Image" width="500">
+                </div>
+            </div>
+        </div>
+        <ng-template #noPosts>
+            <p>Ennek a felhasználónak még nincs bejegyzése</p>
+        </ng-template>
+    </div>
 </div>

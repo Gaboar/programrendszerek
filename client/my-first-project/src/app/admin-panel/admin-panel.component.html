@@ -1,111 +1,135 @@
-<div *ngIf="users.length > 0">
-    <h2>Felhasználók</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Név</th>
-                <th>Profilkép</th>
-                <th>Születésnap</th>
-                <th>Email</th>
-                <th>Admin</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of users">
-                <td>{{user.name}}</td>
-                <td><img [src]="'http://localhost:5000'+ user.imageUrl" alt="Image" height="30"></td>
-                <td>{{user.birthday}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.isAdmin?'Igen':'Nem'}}</td>
-                <td><a (click)="deleteUser(user._id)">Törlés</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div *ngIf="groups.length > 0">
-    <h2>Csoportok</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Név</th>
-                <th>Kép</th>
-                <th>Leírás</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let group of groups">
-                <td>{{group.name}}</td>
-                <td><img [src]="'http://localhost:5000'+ group.imageUrl" alt="Image" height="30"></td>
-                <td>{{group.description}}</td>
-                <td><a (click)="deleteGroup(group._id)">Törlés</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div *ngIf="posts.length > 0">
-    <h2>Bejegyzések</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Hely</th>
-                <th>Szerző</th>
-                <th>Létrehozva</th>
-                <th>Szöveg</th>
-                <th>Kép</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let post of posts">
-                <td>{{post.location}}</td>
-                <td>{{post.author}}</td>
-                <td>{{post.date}}</td>
-                <td>{{post.text}}</td>
-                <td><img *ngIf="post.imageUrl" [src]="'http://localhost:5000'+ post.imageUrl" alt="Image" height="30"></td>
-                <td><a (click)="deletePost(post._id)">Törlés</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div *ngIf="friends.length > 0">
-    <h2>Ismerősök</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Felhasználó</th>
-                <th>Felhasználó</th>
-                <th>Státusz</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let friend of friends">
-                <td>{{friend.user1}}</td>
-                <td>{{friend.user2}}</td>
-                <td>{{friend.accepted}}</td>
-                <td><a (click)="deleteFriend(friend._id)">Törlés</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div *ngIf="members.length > 0">
-    <h2>Csoporttagok</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Csoport</th>
-                <th>Felhasználó</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let member of members">
-                <td>{{member.group}}</td>
-                <td>{{member.user}}</td>
-                <td><a (click)="deleteMember(member._id)">Törlés</a></td>
-            </tr>
-        </tbody>
-    </table>
+<div class="middle-container">
+    <div *ngIf="users.length > 0">
+        <h2>Felhasználók</h2>
+        <table mat-table [dataSource]="users">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Név</th>
+                <td mat-cell *matCellDef="let element">{{element.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef>Profilkép</th>
+                <td mat-cell *matCellDef="let element"><img [src]="'http://localhost:5000'+ element.imageUrl" alt="Image" width="30" height="30"></td>
+            </ng-container>
+            <ng-container matColumnDef="birthday">
+                <th mat-header-cell *matHeaderCellDef>Születési dátum</th>
+                <td mat-cell *matCellDef="let element">{{element.birthday}}</td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let element">{{element.email}}</td>
+            </ng-container>
+            <ng-container matColumnDef="admin">
+                <th mat-header-cell *matHeaderCellDef>Admin</th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-icon *ngIf="element.isAdmin">check</mat-icon>
+                    <mat-icon *ngIf="!element.isAdmin">close</mat-icon>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Törlés</th>
+                <td mat-cell *matCellDef="let element"><a (click)="deleteUser(element._id)"><mat-icon>delete</mat-icon></a></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['name', 'image', 'birthday', 'email', 'admin', 'delete']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['name', 'image', 'birthday', 'email', 'admin', 'delete']"></tr>
+        </table>
+    </div>
+    <div *ngIf="users.length > 0">
+        <h2>Csoportok</h2>
+        <table mat-table [dataSource]="groups">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Név</th>
+                <td mat-cell *matCellDef="let element">{{element.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef>Kép</th>
+                <td mat-cell *matCellDef="let element"><img [src]="'http://localhost:5000'+ element.imageUrl" alt="Image" width="30" height="30"></td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Leírás</th>
+                <td mat-cell *matCellDef="let element">{{element.description}}</td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Törlés</th>
+                <td mat-cell *matCellDef="let element"><a (click)="deleteGroup(element._id)"><mat-icon>delete</mat-icon></a></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['name', 'image', 'description', 'delete']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['name', 'image', 'description', 'delete']"></tr>
+        </table>
+    </div>
+    <div *ngIf="users.length > 0">
+        <h2>Bejegyzések</h2>
+        <table mat-table [dataSource]="posts">
+            <ng-container matColumnDef="location">
+                <th mat-header-cell *matHeaderCellDef>Hely</th>
+                <td mat-cell *matCellDef="let element">{{element.location}}</td>
+            </ng-container>
+            <ng-container matColumnDef="author">
+                <th mat-header-cell *matHeaderCellDef>Szerző</th>
+                <td mat-cell *matCellDef="let element">{{element.author}}</td>
+            </ng-container>
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Létrehozva</th>
+                <td mat-cell *matCellDef="let element">{{element.date}}</td>
+            </ng-container>
+            <ng-container matColumnDef="text">
+                <th mat-header-cell *matHeaderCellDef>Szöveg</th>
+                <td mat-cell *matCellDef="let element">{{element.text}}</td>
+            </ng-container>
+            <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef>Kép</th>
+                <td mat-cell *matCellDef="let element"><img *ngIf="element.imageUrl" [src]="'http://localhost:5000'+ element.imageUrl" alt="Image" width="30" height="30"></td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Törlés</th>
+                <td mat-cell *matCellDef="let element"><a (click)="deletePost(element._id)"><mat-icon>delete</mat-icon></a></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['location', 'author', 'date', 'text', 'image', 'delete']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['location', 'author', 'date', 'text', 'image', 'delete']"></tr>
+        </table>
+    </div>
+    <div *ngIf="users.length > 0">
+        <h2>Ismerősök</h2>
+        <table mat-table [dataSource]="friends">
+            <ng-container matColumnDef="user1">
+                <th mat-header-cell *matHeaderCellDef>Felhasználó</th>
+                <td mat-cell *matCellDef="let element">{{element.user1}}</td>
+            </ng-container>
+            <ng-container matColumnDef="user2">
+                <th mat-header-cell *matHeaderCellDef>Felhasználó</th>
+                <td mat-cell *matCellDef="let element">{{element.user2}}</td>
+            </ng-container>
+            <ng-container matColumnDef="accepted">
+                <th mat-header-cell *matHeaderCellDef>Elfogadva</th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-icon *ngIf="element.accepted">check</mat-icon>
+                    <mat-icon *ngIf="!element.accepted">close</mat-icon>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Törlés</th>
+                <td mat-cell *matCellDef="let element"><a (click)="deleteFriend(element._id)"><mat-icon>delete</mat-icon></a></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['user1', 'user2', 'accepted', 'delete']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['user1', 'user2', 'accepted', 'delete']"></tr>
+        </table>
+    </div>
+    <div *ngIf="users.length > 0">
+        <h2>Csoporttagok</h2>
+        <table mat-table [dataSource]="members">
+            <ng-container matColumnDef="group">
+                <th mat-header-cell *matHeaderCellDef>Csoport</th>
+                <td mat-cell *matCellDef="let element">{{element.group}}</td>
+            </ng-container>
+            <ng-container matColumnDef="user">
+                <th mat-header-cell *matHeaderCellDef>Felhasználó</th>
+                <td mat-cell *matCellDef="let element">{{element.user}}</td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Törlés</th>
+                <td mat-cell *matCellDef="let element"><a (click)="deleteMember(element._id)"><mat-icon>delete</mat-icon></a></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['group', 'user', 'delete']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['group', 'user', 'delete']"></tr>
+        </table>
+    </div>
 </div>

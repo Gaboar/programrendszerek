@@ -8,18 +8,20 @@ import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { PostCreatorComponent } from '../shared/post-creator/post-creator.component';
 import { Post } from '../shared/model/Post';
 import { Group } from '../shared/model/Group';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, PostCreatorComponent],
+  imports: [CommonModule, NavbarComponent, PostCreatorComponent, MatIconModule],
   templateUrl: './timeline.component.html',
   styleUrl: './timeline.component.scss'
 })
 export class TimelineComponent {
   posts?: Post[];
-  friends?: User[] = [];
-  groups?: Group[] = [];
+  authors: {[userid: string]: User} = {};
+  friends: User[] = [];
+  groups: Group[] = [];
 
   constructor(
     private userService: UserService,
@@ -53,6 +55,17 @@ export class TimelineComponent {
     this.postService.getUserTimeline().subscribe({
       next: (data) => {
         this.posts = data;
+        this.posts.forEach(post => {
+          if (!this.authors[post.author]) {
+            this.userService.getById(post.author).subscribe({
+              next: (data) => {
+                this.authors[post.author] = data;
+              }, error: (err) => {
+                console.log(err);
+              }
+            });
+          }
+        });
       }, error: (err) => {
         console.log(err);
       }

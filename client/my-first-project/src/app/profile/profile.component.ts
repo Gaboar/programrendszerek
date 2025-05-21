@@ -8,11 +8,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { PostCreatorComponent } from '../shared/post-creator/post-creator.component';
 import { switchMap } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, PostCreatorComponent],
+  imports: [CommonModule, NavbarComponent, PostCreatorComponent, MatButtonModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -20,6 +21,7 @@ export class ProfileComponent {
   user?: User;
   currentUser?: User;
   posts?: Post[];
+  authors: {[userid: string]: User} = {};
   isFriends?: string;
   sender?: string;
 
@@ -52,6 +54,17 @@ export class ProfileComponent {
     ).subscribe({
       next: (data) => {
         this.posts = data;
+        this.posts.forEach(post => {
+          if (!this.authors[post.author]) {
+            this.userService.getById(post.author).subscribe({
+              next: (data) => {
+                this.authors[post.author] = data;
+              }, error: (err) => {
+                console.log(err);
+              }
+            });
+          }
+        });
       }, error: (err) => {
         console.log(err);
       }
@@ -60,6 +73,7 @@ export class ProfileComponent {
       switchMap(params => this.userService.isFriends(params['userid']))
     ).subscribe({
       next: (data) => {
+        console.log(data)
         if (data) {
           this.isFriends = data.accepted ? 'true' : 'pending';
           this.sender = data.user1;
@@ -95,9 +109,21 @@ export class ProfileComponent {
     });
   }
 
+  acceptFriend() {
+    this.userService.acceptFriend(this.route.snapshot.params['userid']).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.updateFriend();
+      }, error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
   updateFriend() {
     this.userService.isFriends(this.route.snapshot.params['userid']).subscribe({
       next: (data) => {
+        console.log(data)
         if (data) {
           this.isFriends = data.accepted ? 'true' : 'pending';
           this.sender = data.user1;

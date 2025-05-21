@@ -10,11 +10,12 @@ import { PostCreatorComponent } from '../shared/post-creator/post-creator.compon
 import { switchMap } from 'rxjs';
 import { GroupService } from '../shared/services/group.service';
 import { Group } from '../shared/model/Group';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-group',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, PostCreatorComponent],
+  imports: [CommonModule, NavbarComponent, PostCreatorComponent, MatButtonModule],
   templateUrl: './group.component.html',
   styleUrl: './group.component.scss'
 })
@@ -22,6 +23,7 @@ export class GroupComponent {
   group?: Group;
   currentUser?: User;
   posts?: Post[];
+  authors: {[userid: string]: User} = {};
   isInGroup?: boolean;
 
   constructor(
@@ -59,6 +61,7 @@ export class GroupComponent {
         } else {
           this.isInGroup = false;
           this.posts = [];
+          this.authors = {};
         }
       }, error: (err) => {
         console.log(err);
@@ -97,6 +100,7 @@ export class GroupComponent {
         } else {
           this.isInGroup = false;
           this.posts = [];
+          this.authors = {};
         }
       }, error: (err) => {
         console.log(err);
@@ -109,6 +113,17 @@ export class GroupComponent {
       next: (data) => {
         if (data) {
           this.posts = data;
+          this.posts.forEach(post => {
+          if (!this.authors[post.author]) {
+            this.userService.getById(post.author).subscribe({
+              next: (data) => {
+                this.authors[post.author] = data;
+              }, error: (err) => {
+                console.log(err);
+              }
+            });
+          }
+        });
         }
       }, error: (err) => {
         console.log(err);

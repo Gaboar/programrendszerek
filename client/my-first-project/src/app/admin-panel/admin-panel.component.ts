@@ -8,11 +8,13 @@ import { Member } from '../shared/model/GroupMember';
 import { UserService } from '../shared/services/user.service';
 import { GroupService } from '../shared/services/group.service';
 import { PostService } from '../shared/services/post.service';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatTableModule, MatIconModule],
   templateUrl: './admin-panel.component.html',
   styleUrl: './admin-panel.component.scss'
 })

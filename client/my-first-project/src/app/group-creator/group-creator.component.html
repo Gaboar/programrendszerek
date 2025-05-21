@@ -1,21 +1,24 @@
 <app-navbar></app-navbar>
-<form class="login-form" [formGroup]="groupForm" (ngSubmit)="onSubmit($event)">
-    <input formControlName="name" type="text" placeholder="Név" [ngClass]="{'invalid-input': groupForm.get('name')?.errors}" />
-    <div *ngIf="groupForm.get('name')?.invalid && (groupForm.get('name')?.dirty || groupForm.get('name')?.touched)">
-        <p *ngIf="groupForm.get('name')?.errors && groupForm.get('name')?.errors!['required']">Add meg a neved</p>
-    </div>
-    <input formControlName="image" type="file" (change)="onFileSelected($event)"/>
-    <div *ngIf="groupForm.get('image')?.invalid && (groupForm.get('image')?.dirty || groupForm.get('image')?.touched)">
-        <p *ngIf="groupForm.get('image')?.errors && groupForm.get('image')?.errors!['required']">Tölts fel egy képet</p>
-    </div>
-    <input formControlName="description" type="text" placeholder="Leírás" [ngClass]="{'invalid-input': groupForm.get('description')?.errors}" />
-    <div *ngIf="groupForm.get('description')?.invalid && (groupForm.get('description')?.dirty || groupForm.get('description')?.touched)">
-        <p *ngIf="groupForm.get('description')?.errors && groupForm.get('description')?.errors!['required']">Add meg a csoport leírását</p>
-    </div>
-    <div class="buttons">
-        <button type="submit">Létrehozás</button>
-    </div>
-    <div class="buttons">
-        <button type="reset" (click)="goBack()">Vissza</button>
-    </div>
-</form>
+<div class="form-container">
+    <form class="group-form" [formGroup]="groupForm" (ngSubmit)="onSubmit($event)">
+        <h2>Csoport létrehozása</h2>
+        <mat-form-field>
+            <mat-label>Név</mat-label>
+            <input matInput formControlName="name" required />
+        </mat-form-field>
+        <input formControlName="image" type="file" (change)="onFileSelected($event)"/>
+        <div *ngIf="groupForm.get('image')?.invalid && (groupForm.get('image')?.dirty || groupForm.get('image')?.touched)">
+            <p *ngIf="groupForm.get('image')?.errors && groupForm.get('image')?.errors!['required']">Tölts fel egy képet</p>
+        </div>
+        <mat-form-field>
+            <mat-label>Leírás</mat-label>
+            <textarea matInput formControlName="description" required ></textarea>
+        </mat-form-field>
+        <div class="buttons">
+            <button mat-raised-button color="primary" type="submit">Létrehozás</button>
+        </div>
+        <div class="buttons">
+            <button mat-raised-button type="reset" (click)="goBack()">Vissza</button>
+        </div>
+    </form>
+</div>

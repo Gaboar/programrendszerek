@@ -4,11 +4,17 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UserService } from '../shared/services/user.service';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { User } from '../shared/model/User';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-profile-editor',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, NavbarComponent],
+  providers: [provideNativeDateAdapter()],
+  imports: [ReactiveFormsModule, CommonModule, NavbarComponent, MatInputModule, MatFormFieldModule, MatButtonModule, MatDatepickerModule],
   templateUrl: './profile-editor.component.html',
   styleUrl: './profile-editor.component.scss'
 })
@@ -91,7 +97,9 @@ export class ProfileEditorComponent {
         formData.append('name', this.profileForm.value['name']);
       }
       if (this.profileForm.value['birthday'] !== '') {
-        formData.append('birthday', this.profileForm.value['birthday']);
+        const date = new Date(this.profileForm.value['birthday']);
+        const dateString = `${date.getFullYear()}. ${date.getMonth().toString().length == 1 ? '0': ''}${date.getMonth()}. ${date.getDate().toString().length == 1 ? '0': ''}${date.getDate()}.`;
+        formData.append('birthday', dateString);
       }
       if (this.profileForm.value['email'] !== '') {
         formData.append('email', this.profileForm.value['email']);
