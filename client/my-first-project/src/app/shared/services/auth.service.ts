@@ -22,9 +22,11 @@ export class AuthService {
   register(user: User) {
     const body = new URLSearchParams();
     body.set('name', user.name);
-    const date = new Date(user.birthday);
-    const dateString = `${date.getFullYear()}. ${date.getMonth().toString().length == 1 ? '0': ''}${date.getMonth()}. ${date.getDate().toString().length == 1 ? '0': ''}${date.getDate()}.`;
-    body.set('birthday', dateString);
+    if (user.birthday !== '') {
+      const date = new Date(user.birthday);
+      const dateString = `${date.getFullYear()}. ${date.getMonth().toString().length == 1 ? '0': ''}${date.getMonth()}. ${date.getDate().toString().length == 1 ? '0': ''}${date.getDate()}.`;
+      body.set('birthday', dateString);
+    }
     body.set('email', user.email);
     body.set('password', user.password);
     const headers = new HttpHeaders({
