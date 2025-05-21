@@ -490,13 +490,13 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
                 {user2: user}
             ], accepted: true});
             query.then(data => {
-                const ids = data.map(f => (f.user1 === user ? f.user2 : f.user1))
+                let ids = data.map(f => (f.user1 === user ? f.user2 : f.user1))
                 const query = GroupMember.find({user: user});
                 query.then(data => {
                     const ids2 = data.map(f => (f.group))
                     const query = Post.find({$or: [
-                        {author: {$in: ids}, location: 'public'},
-                        {location: {$in: ids2}, author: {$ne: user}}
+                        {$or:[{author: {$in: ids}}, {author: user}], location: 'public'},
+                        {location: {$in: ids2}}
                     ]});
                     query.then(data => {
                         res.status(200).send(data);
