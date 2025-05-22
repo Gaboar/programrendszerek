@@ -2,4 +2,4 @@
 /build
 uploads/*
 
-!uploads/.gitkeep
+!uploads/defaultpfp.png
